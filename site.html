@@ -1,11 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2024</title>
+    <title>Игра Мориарти</title>
+    <script>
+        async function iniced() {
+            let nameElement = document.getElementById("Имя");
+            let name = nameElement.value;
+            let usernameElement = document.getElementById("Фамилия");
+            let username = usernameElement.value;
+
+            let response = await fetch(
+                "https://chat.vu.profcomff.com/message",
+                {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "text": message,
+                        "author": author
+                    })
+                }
+            )
+            console.log(response);
+        }
+
+
+        async function GetMessages() {
+            let response = await fetch("https://chat.vu.profcomff.com/message")
+            console.log(response);
+            let response1 = await response.json();
+            console.log(response1.messages)
+
+            function drawMessage(message) {
+                let message_list = document.getElementById("message_list")
+                let li = document.createElement('li');
+                li.setAttribute('class','message');
+                li.innerText = message.author + ": " + message.text + " (" + message.time + ")";
+                message_list.appendChild(li);
+            }
+
+            let message_list = document.getElementById("message_list")
+            message_list.innerHTML = '';
+            response1.messages.forEach(drawMessage);
+        }
+    </script>
 </head>
+
 <body>
-    
+    <h1>Игра Мориарти</h1>
+    <div class="chat">
+        
+        <form>
+            <input id="author" type="text" placeholder="Автор" />
+            <input id="message" type="text" placeholder="Текст сообщения" />
+            <input id="send" type="button" value="Отправить" onclick="SendMessages()" />
+            <input id="refresh" type="button" value="Обновить" onclick="GetMessages()" />
+        </form>
+    </div>
 </body>
+
 </html>
